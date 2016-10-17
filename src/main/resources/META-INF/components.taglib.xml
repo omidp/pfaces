@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
+	version="2.0">
+
+	<namespace>http://omidbiz.com/ui</namespace>
+	<tag>
+		<tag-name>datePicker</tag-name>
+		<component>
+			<component-type>com.omidbiz.core.component.JalaliCalendar</component-type>
+			<renderer-type>com.omidbiz.core.component.JalaliCalendarRenderer</renderer-type>
+		</component>
+		
+		<attribute>
+			<description><![CDATA[Style attribute of the generated Input Tag.]]></description>
+			<name>style</name>
+			<required>false</required>
+			<type>java.lang.String</type>
+		</attribute>
+		<attribute>
+			<description><![CDATA[Space seperated list of style classes for the generated Input Tag.]]></description>
+			<name>styleClass</name>
+			<required>false</required>
+			<type>java.lang.String</type>
+		</attribute>
+		
+		<attribute>
+			<description><![CDATA[]]></description>
+			<name>onselect</name>
+			<required>false</required>
+			<type>java.lang.String</type>
+		</attribute>
+		
+		<attribute>
+			<description><![CDATA[]]></description>
+			<name>value</name>
+			<required>false</required>
+			<type>java.lang.Object</type>
+		</attribute>
+		
+		<attribute>
+			<description><![CDATA[]]></description>
+			<name>disabled</name>
+			<required>false</required>
+			<type>boolean</type>
+		</attribute>
+		
+		<attribute>
+			<description><![CDATA[]]></description>
+			<name>showTime</name>
+			<required>false</required>
+			<type>boolean</type>
+		</attribute>
+		
+	</tag>
+</facelet-taglib>
