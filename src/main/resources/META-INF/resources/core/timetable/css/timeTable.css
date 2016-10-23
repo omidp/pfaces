@@ -1,0 +1,28 @@
+table.ptimetable tr{
+  font-family:Yekan,Tahoma;
+}
+
+table.ptimetable thead tr th{
+	text-align:center;
+}
+.nextYearLink:before
+{
+	content: " >> ";
+}
+
+
+.prevYearLink:before
+{
+	content: " << ";
+}
+
+
+.nextMonthLink:before
+{
+	content: " > ";
+}
+
+.prevMonthLink:before
+{
+	content: " < ";
+}

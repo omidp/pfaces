@@ -78,8 +78,10 @@
 							<removeIncluded>true</removeIncluded>
 							<output>${project.build.directory}/classes/META-INF/resources/pfaces/components.css</output>
 							<includes>
+								<include>${project.build.directory}/classes/META-INF/resources/core/kube.css</include>
 								<include>${project.build.directory}/classes/META-INF/resources/core/jquery-ui.css</include>
 								<include>${project.build.directory}/classes/META-INF/resources/core/datepicker/css/jquery-ui-timepicker-addon.css</include>
+								<include>${project.build.directory}/classes/META-INF/resources/core/timetable/css/timeTable.css</include>
 							</includes>
 						</aggregation>
 						<aggregation>

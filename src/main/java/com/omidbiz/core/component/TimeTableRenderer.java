@@ -79,7 +79,7 @@ public class TimeTableRenderer extends Renderer
 
     private void encodeTable(FacesContext context, TimeTable timeTable, StringBuilder tt)
     {
-        tt.append("<table dir='rtl'>");
+        tt.append("<table dir='rtl' class=\"ptimetable bordered\">");
         tt.append("<thead>").append("<tr>");
         // build days header
         for (int i = 0; i < DAYS_NAMES.length; i++)
@@ -125,27 +125,36 @@ public class TimeTableRenderer extends Renderer
         String viewId = viewRoot.getViewId();        
         Map<String, List<String>> parameters = new HashMap<String, List<String>>();
         //
-        content.append("<div>");
+        content.append("<div class=\"row\">");
+        
+        content.append("<div class=\"col\">");
         parameters.put(YEAR_PARAM, Arrays.asList(String.valueOf(pc.get(PersianCalendar.YEAR)-1)));
         String url = context.getApplication().getViewHandler().getBookmarkableURL(context, viewId, parameters, false);
-        content.append(String.format("<a href='%s'>prev year</a>", url));
+        content.append(String.format("<a href='%s' class='prevYearLink'></a>", url));
+        content.append("</div>");
+        //
+        content.append("<div class=\"col\">");
         parameters.clear();
         parameters.put(MONTH_PARAM, Arrays.asList(String.valueOf(pc.get(PersianCalendar.MONTH)-1)));
         url = context.getApplication().getViewHandler().getBookmarkableURL(context, viewId, parameters, false);
-        content.append(String.format("<a href='%s'>prev month</a>", url));        
+        content.append(String.format("<a href='%s' class='prevMonthLink'></a>", url));        
         content.append("</div>");
         //
-        content.append("<div>").append(PersianDateConverter.getInstance().GregorianToSolar(sdf.format(pc.getTime()))).append("</div>");
+        content.append("<div class=\"col\">").append(PersianDateConverter.getInstance().GregorianToSolar(sdf.format(pc.getTime()))).append("</div>");
         //
         parameters.clear();
-        content.append("<div>");
+        content.append("<div class=\"col\">");
         parameters.put(YEAR_PARAM, Arrays.asList(String.valueOf(pc.get(PersianCalendar.YEAR)+1)));
         url = context.getApplication().getViewHandler().getBookmarkableURL(context, viewId, parameters, false);
-        content.append(String.format("<a href='%s'>next year</a>", url));
+        content.append(String.format("<a href='%s' class='nextYearLink'></a>", url));
+        content.append("</div>");
+        content.append("<div class=\"col\">");
         parameters.clear();
         parameters.put(MONTH_PARAM, Arrays.asList(String.valueOf(pc.get(PersianCalendar.MONTH)+1)));
         url = context.getApplication().getViewHandler().getBookmarkableURL(context, viewId, parameters, false);
-        content.append(String.format("<a href='%s'>next month</a>", url));        
+        content.append(String.format("<a href='%s' class='nextMonthLink'></a>", url));        
+        content.append("</div>");
+        //
         content.append("</div>");
     }
 
