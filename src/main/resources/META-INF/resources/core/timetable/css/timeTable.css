@@ -5,15 +5,23 @@ table.ptimetable tr{
 table.ptimetable thead tr th{
 	text-align:center;
 }
+
 .nextYearLink:before
 {
-	content: " >> ";
+	content: " >> ";	
 }
 
+.nextYearLink{
+	text-decoration:none !important;
+}
 
 .prevYearLink:before
 {
 	content: " << ";
+}
+
+.prevYearLink{
+	text-decoration:none !important;
 }
 
 
@@ -22,7 +30,27 @@ table.ptimetable thead tr th{
 	content: " > ";
 }
 
+.nextMonthLink{
+	text-decoration:none !important;
+}
+
 .prevMonthLink:before
 {
 	content: " < ";
+}
+
+.prevMonthLink{
+	text-decoration:none !important;
+}
+
+table.ptimetable tbody tr td{
+
+}
+
+.dayRow{
+
+}
+
+.holiday{
+  color:#ED1212;
 }

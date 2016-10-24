@@ -3,6 +3,7 @@ package com.omidbiz.core.component;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,8 +92,8 @@ public class TimeTableRenderer extends Renderer
         if (PersianCalendar.isLeapYear(pc.get(PersianCalendar.YEAR)))
             DAYS_IN_MONTH[11] = 30;
         tt.append("<tbody>");
-        int monthStartDay = pc.get(PersianCalendar.DAY_OF_WEEK)-1;
-        int month = pc.get(PersianCalendar.MONTH);  // based on zero
+        int monthStartDay = pc.get(PersianCalendar.DAY_OF_WEEK) - 1;
+        int month = pc.get(PersianCalendar.MONTH); // based on zero
         int monthDay = DAYS_IN_MONTH[month];
         int dayCounter = 0;
         for (int i = 1; i <= (monthDay + monthStartDay); i++)
@@ -100,10 +101,22 @@ public class TimeTableRenderer extends Renderer
             if (dayCounter == 0)
                 tt.append("<tr>");
             if (i <= monthStartDay)
-                tt.append("<td>").append(" ").append("</td>");
+                tt.append("<td class='emptyRow'>").append(" ").append("</td>");
             else
             {
-                tt.append("<td>").append(i - monthStartDay).append("</td>");
+                CalendarModel cm = (CalendarModel) timeTable.getValue();
+                if (cm == null)
+                    cm = new DefaultCalendarModel();
+                int day = i - monthStartDay;
+                Date date = createDate(pc.get(PersianCalendar.YEAR), pc.get(PersianCalendar.MONTH), day);                
+                tt.append(String.format("<td class='dayRow %s'>", cm.isHoliday(date) ? "holiday" : ""));
+                tt.append("<div>");
+                tt.append(day);
+                tt.append("</div>");
+                //
+                List<CalendarEvent> events = cm.getEvents();
+                createEvents(events, tt);                
+                tt.append("</td>");
             }
             dayCounter++;
 
@@ -117,42 +130,69 @@ public class TimeTableRenderer extends Renderer
         tt.append("</tr>");
         tt.append("</tbody>").append("</table>");
     }
+    
+    private void createEvents(List<CalendarEvent> ce, StringBuilder sb)
+    {
+        if(ce != null && ce.isEmpty() == false)
+        {
+            for (CalendarEvent calendarEvent : ce)
+            {
+                sb.append("<span>");
+                sb.append(calendarEvent.getTitle());
+                sb.append("</span>");
+            }
+        }
+    }
 
+    
+    private Date createDate(int year, int month, int day){
+        PersianCalendar cal = new PersianCalendar();
+        cal.set(PersianCalendar.YEAR, year);
+        cal.set(PersianCalendar.MONTH, month);
+        cal.set(PersianCalendar.DATE, day);        
+        cal.set(PersianCalendar.HOUR, 0);
+        cal.set(PersianCalendar.MINUTE, 0);
+        cal.set(PersianCalendar.SECOND, 0);
+        cal.set(PersianCalendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+    
     private void encodeHeader(FacesContext context, TimeTable timeTable, StringBuilder content)
     {
         sdf.applyPattern("yyyy/MM/dd");
         UIViewRoot viewRoot = context.getViewRoot();
-        String viewId = viewRoot.getViewId();        
+        String viewId = viewRoot.getViewId();
         Map<String, List<String>> parameters = new HashMap<String, List<String>>();
         //
         content.append("<div class=\"row\">");
-        
+
         content.append("<div class=\"col\">");
-        parameters.put(YEAR_PARAM, Arrays.asList(String.valueOf(pc.get(PersianCalendar.YEAR)-1)));
+        parameters.put(YEAR_PARAM, Arrays.asList(String.valueOf(pc.get(PersianCalendar.YEAR) - 1)));
         String url = context.getApplication().getViewHandler().getBookmarkableURL(context, viewId, parameters, false);
-        content.append(String.format("<a href='%s' class='prevYearLink'></a>", url));
+        content.append(String.format("<a href='%s' class='prevYearLink' title='\u0633\u0627\u0644 \u0642\u0628\u0644'></a>", url));
         content.append("</div>");
         //
         content.append("<div class=\"col\">");
         parameters.clear();
-        parameters.put(MONTH_PARAM, Arrays.asList(String.valueOf(pc.get(PersianCalendar.MONTH)-1)));
+        parameters.put(MONTH_PARAM, Arrays.asList(String.valueOf(pc.get(PersianCalendar.MONTH) - 1)));
         url = context.getApplication().getViewHandler().getBookmarkableURL(context, viewId, parameters, false);
-        content.append(String.format("<a href='%s' class='prevMonthLink'></a>", url));        
+        content.append(String.format("<a href='%s' class='prevMonthLink' title='\u0645\u0627\u0647 \u0642\u0628\u0644'></a>", url));
         content.append("</div>");
         //
-        content.append("<div class=\"col\">").append(PersianDateConverter.getInstance().GregorianToSolar(sdf.format(pc.getTime()))).append("</div>");
+        content.append("<div class=\"col\">").append(PersianDateConverter.getInstance().GregorianToSolar(sdf.format(pc.getTime())))
+                .append("</div>");
         //
-        parameters.clear();
         content.append("<div class=\"col\">");
-        parameters.put(YEAR_PARAM, Arrays.asList(String.valueOf(pc.get(PersianCalendar.YEAR)+1)));
+        parameters.clear();
+        parameters.put(MONTH_PARAM, Arrays.asList(String.valueOf(pc.get(PersianCalendar.MONTH) + 1)));
         url = context.getApplication().getViewHandler().getBookmarkableURL(context, viewId, parameters, false);
-        content.append(String.format("<a href='%s' class='nextYearLink'></a>", url));
+        content.append(String.format("<a href='%s' class='nextMonthLink' title='\u0645\u0627\u0647 \u0628\u0639\u062F'></a>", url));
         content.append("</div>");
-        content.append("<div class=\"col\">");
         parameters.clear();
-        parameters.put(MONTH_PARAM, Arrays.asList(String.valueOf(pc.get(PersianCalendar.MONTH)+1)));
+        content.append("<div class=\"col\">");
+        parameters.put(YEAR_PARAM, Arrays.asList(String.valueOf(pc.get(PersianCalendar.YEAR) + 1)));
         url = context.getApplication().getViewHandler().getBookmarkableURL(context, viewId, parameters, false);
-        content.append(String.format("<a href='%s' class='nextMonthLink'></a>", url));        
+        content.append(String.format("<a href='%s' class='nextYearLink' title='\u0633\u0627\u0644 \u0628\u0639\u062F'></a>", url));
         content.append("</div>");
         //
         content.append("</div>");
@@ -204,47 +244,47 @@ public class TimeTableRenderer extends Renderer
     public static void main(String[] args)
     {
         pc.set(PersianCalendar.MONTH, 7);
-      System.out.println( pc.get(PersianCalendar.DAY_OF_WEEK));
-//        PersianCalendar pc = new PersianCalendar();
-//        StringBuilder tt = new StringBuilder();
-//        tt.append("<table dir='rtl'>");
-//        tt.append("<thead>").append("<tr>");
-//        // build days
-//        for (int i = 0; i < DAYS_NAMES.length; i++)
-//        {
-//            tt.append("<th>").append(DAYS_NAMES[i]).append("</th>");
-//        }
-//        tt.append("</tr>").append("</thead>");
-//        tt.append("<tbody>");
-//        // build month days
-//        DAYS_IN_MONTH[11] = 30;
-//        int monthStartDay = pc.get(PersianCalendar.DAY_OF_MONTH);
-//        int month = pc.get(PersianCalendar.MONTH);// get from calendar start
-//                                                  // based on zero
-//        int monthDay = DAYS_IN_MONTH[month];
-//        int dayCounter = 0;
-//        for (int i = 1; i <= (monthDay + monthStartDay); i++)
-//        {
-//            if (dayCounter == 0)
-//                tt.append("<tr>");
-//            if (i <= monthStartDay)
-//                tt.append("<td>").append(" ").append("</td>");
-//            else
-//            {
-//                tt.append("<td>").append(i - monthStartDay).append("</td>");
-//            }
-//            dayCounter++;
-//
-//            if (dayCounter % 7 == 0)
-//            {
-//                dayCounter = 0;
-//                tt.append("</tr>");
-//            }
-//        }
-//        //
-//        tt.append("</tr>");
-//        tt.append("</tbody>").append("</table>");
-//        System.out.println(tt.toString());
+        System.out.println(pc.get(PersianCalendar.DAY_OF_WEEK));
+        // PersianCalendar pc = new PersianCalendar();
+        // StringBuilder tt = new StringBuilder();
+        // tt.append("<table dir='rtl'>");
+        // tt.append("<thead>").append("<tr>");
+        // // build days
+        // for (int i = 0; i < DAYS_NAMES.length; i++)
+        // {
+        // tt.append("<th>").append(DAYS_NAMES[i]).append("</th>");
+        // }
+        // tt.append("</tr>").append("</thead>");
+        // tt.append("<tbody>");
+        // // build month days
+        // DAYS_IN_MONTH[11] = 30;
+        // int monthStartDay = pc.get(PersianCalendar.DAY_OF_MONTH);
+        // int month = pc.get(PersianCalendar.MONTH);// get from calendar start
+        // // based on zero
+        // int monthDay = DAYS_IN_MONTH[month];
+        // int dayCounter = 0;
+        // for (int i = 1; i <= (monthDay + monthStartDay); i++)
+        // {
+        // if (dayCounter == 0)
+        // tt.append("<tr>");
+        // if (i <= monthStartDay)
+        // tt.append("<td>").append(" ").append("</td>");
+        // else
+        // {
+        // tt.append("<td>").append(i - monthStartDay).append("</td>");
+        // }
+        // dayCounter++;
+        //
+        // if (dayCounter % 7 == 0)
+        // {
+        // dayCounter = 0;
+        // tt.append("</tr>");
+        // }
+        // }
+        // //
+        // tt.append("</tr>");
+        // tt.append("</tbody>").append("</table>");
+        // System.out.println(tt.toString());
     }
 
 }
