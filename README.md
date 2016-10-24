@@ -38,7 +38,8 @@ xmlns:pfaces="http://omidbiz.com/ui"
 
 ###### timetable 
 
-![alt tag](https://github.com/omidp/pfaces/blob/master/timeTable.png)
+![alt tag](http://cdn.persiangig.com/preview/IEodTMXT6Q/timeTable.png)
+
 
 ```
 <pfaces:timeTable value="#{calendarEventHome.model}"></pfaces:timeTable>
