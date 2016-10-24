@@ -1,18 +1,18 @@
 # Persian Faces (JSF 2 Persian components)
 
-+ clone project
+## Clone project
 
 ```
 git clone https://github.com/omidp/pfaces.git
 ```
 
-+ build 
+## Build 
 
 ```
 mvn clean install
 ```
 
-+ add dependency to your project
+## Add dependency to your project
 
 ```
 <dependency>
@@ -22,21 +22,23 @@ mvn clean install
 </dependency>
 ```
 
-+ add namespace 
+## Add namespace to your xhtml
 
 ```
 xmlns:pfaces="http://omidbiz.com/ui"
 ```
 
-+ use components
+## Components
 
-+ date picker component
+###### date picker
 
 ```
 <pfaces:datePicker value="#{vacationHome.instance.fromDate}" showTime="true"></pfaces:datePicker>
 ```
 
-+ timetable component
+###### timetable 
+
+![alt tag](https://github.com/omidp/pfaces/blob/master/timeTable.png)
 
 ```
 <pfaces:timeTable value="#{calendarEventHome.model}"></pfaces:timeTable>
@@ -66,9 +68,9 @@ public class CalendarEventHome
 ```
 
 
-+ dependencies
+## Dependencies
 
-this project depends on 
+Project includes
 
 + jQuery 1.7
 + jQuery ui 1.8.16
