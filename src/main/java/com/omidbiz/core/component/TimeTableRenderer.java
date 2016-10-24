@@ -3,6 +3,7 @@ package com.omidbiz.core.component;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.context.ResponseWriter;
 import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
+import javax.faces.event.ActionEvent;
 import javax.faces.render.FacesRenderer;
 import javax.faces.render.Renderer;
 import javax.servlet.http.HttpServletRequest;
@@ -42,11 +44,9 @@ public class TimeTableRenderer extends Renderer
     {
         TimeTable calendar = (TimeTable) component;
         String param = calendar.getClientId(context);
-        String submittedValue = context.getExternalContext().getRequestParameterMap().get(param);
 
-        if (submittedValue != null)
-        {
-            calendar.setSubmittedValue(submittedValue);
+        if(context.getExternalContext().getRequestParameterMap().containsKey(param)) {
+            component.queueEvent(new ActionEvent(component));
         }
     }
 
@@ -61,9 +61,9 @@ public class TimeTableRenderer extends Renderer
     {
         ResponseWriter writer = context.getResponseWriter();
         String clientId = timeTable.getClientId(context);
-        HttpServletRequest req = (HttpServletRequest) context.getExternalContext().getRequest();
-        String monthParam = req.getParameter(MONTH_PARAM);
-        String yearParam = req.getParameter(YEAR_PARAM);
+        Map<String, String> requestParameterMap = context.getExternalContext().getRequestParameterMap();
+        String monthParam = requestParameterMap.get(MONTH_PARAM);
+        String yearParam = requestParameterMap.get(YEAR_PARAM);
         //
         if (monthParam != null && monthParam.trim().length() > 0)
             pc.set(PersianCalendar.MONTH, Integer.parseInt(monthParam));
@@ -108,14 +108,18 @@ public class TimeTableRenderer extends Renderer
                 if (cm == null)
                     cm = new DefaultCalendarModel();
                 int day = i - monthStartDay;
-                Date date = createDate(pc.get(PersianCalendar.YEAR), pc.get(PersianCalendar.MONTH), day);                
-                tt.append(String.format("<td class='dayRow %s'>", cm.isHoliday(date) ? "holiday" : ""));
-                tt.append("<div>");
+                Date date = createDate(pc.get(PersianCalendar.YEAR), pc.get(PersianCalendar.MONTH), day);
+                tt.append(String.format("<td class='dayRow %s %s'>", isCurrentDate(date) ? "currentDay" : "", cm.isHoliday(date)  ? "holiday" : ""));
+                //
+                if(timeTable.getOnselect() != null && timeTable.getOnselect().length()>0)
+                    tt.append(String.format("<div onclick=\"%s(%s)\">", timeTable.getOnselect(),date.getTime()));
+                else
+                    tt.append("<div>");
                 tt.append(day);
                 tt.append("</div>");
-                //
+                // TODO:fix design
                 List<CalendarEvent> events = cm.getEvents();
-                createEvents(events, tt);                
+                createEvents(events, tt, date);
                 tt.append("</td>");
             }
             dayCounter++;
@@ -131,32 +135,65 @@ public class TimeTableRenderer extends Renderer
         tt.append("</tbody>").append("</table>");
     }
     
-    private void createEvents(List<CalendarEvent> ce, StringBuilder sb)
+    private boolean isCurrentDate(Date date)
     {
-        if(ce != null && ce.isEmpty() == false)
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.set(Calendar.HOUR, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            //
+            Calendar cal2 = Calendar.getInstance();
+            cal2.setTime(date);
+            cal2.set(Calendar.HOUR, 0);
+            cal2.set(Calendar.MINUTE, 0);
+            cal2.set(Calendar.SECOND, 0);
+            cal2.set(Calendar.MILLISECOND, 0);
+            return cal2.getTime().compareTo(cal.getTime()) == 0;
+    }
+
+    private void createEvents(List<CalendarEvent> ce, StringBuilder sb, Date date)
+    {
+        if (ce != null && ce.isEmpty() == false)
         {
             for (CalendarEvent calendarEvent : ce)
             {
-                sb.append("<span>");
-                sb.append(calendarEvent.getTitle());
-                sb.append("</span>");
+                if (createDate(calendarEvent.getStartDate()).compareTo(date) == 0 
+                        && createDate(calendarEvent.getEndDate()).compareTo(date) >= 0)
+                {
+                    sb.append("<span>");
+                    sb.append(calendarEvent.getTitle());
+                    sb.append("</span>");
+                }
             }
         }
     }
 
     
-    private Date createDate(int year, int month, int day){
+    private Date createDate(Date date)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+    }
+    
+    private Date createDate(int year, int month, int day)
+    {
         PersianCalendar cal = new PersianCalendar();
         cal.set(PersianCalendar.YEAR, year);
         cal.set(PersianCalendar.MONTH, month);
-        cal.set(PersianCalendar.DATE, day);        
+        cal.set(PersianCalendar.DATE, day);
         cal.set(PersianCalendar.HOUR, 0);
         cal.set(PersianCalendar.MINUTE, 0);
         cal.set(PersianCalendar.SECOND, 0);
         cal.set(PersianCalendar.MILLISECOND, 0);
         return cal.getTime();
     }
-    
+
     private void encodeHeader(FacesContext context, TimeTable timeTable, StringBuilder content)
     {
         sdf.applyPattern("yyyy/MM/dd");
@@ -244,7 +281,9 @@ public class TimeTableRenderer extends Renderer
     public static void main(String[] args)
     {
         pc.set(PersianCalendar.MONTH, 7);
+        pc.set(PersianCalendar.DATE, 21);
         System.out.println(pc.get(PersianCalendar.DAY_OF_WEEK));
+        System.out.println(PersianCalendar.FRIDAY);
         // PersianCalendar pc = new PersianCalendar();
         // StringBuilder tt = new StringBuilder();
         // tt.append("<table dir='rtl'>");

@@ -74,13 +74,7 @@
 			<required>false</required>
 			<type>java.lang.String</type>
 		</attribute>
-		
-		<attribute>
-			<description><![CDATA[]]></description>
-			<name>onselect</name>
-			<required>false</required>
-			<type>java.lang.String</type>
-		</attribute>
+	
 		
 		<attribute>
 			<description><![CDATA[]]></description>
@@ -94,6 +88,27 @@
 			<name>value</name>
 			<required>false</required>
 			<type>org.omidbiz.core.component.CalendarModel</type>
+		</attribute>
+		
+		<attribute>
+			<description><![CDATA[An actionlistener to process when command is executed.]]></description>
+			<name>actionListener</name>
+			<required>false</required>
+			<type>javax.faces.event.ActionListener</type>
+		</attribute>
+		<attribute>
+			<description><![CDATA[A method expression or a string outcome to process when command is executed.]]></description>
+			<name>action</name>
+			<required>false</required>
+			<type>javax.el.MethodExpression</type>
+		</attribute>
+		<attribute>
+			<description><![CDATA[A client-side javascript function name (only name without parantheses) with epoch argument to get current day in
+				java script you need to new Date and set this epoch argument 
+			 ]]></description>
+			<name>onselect</name>
+			<required>false</required>
+			<type>java.lang.String</type>
 		</attribute>
 		
 		

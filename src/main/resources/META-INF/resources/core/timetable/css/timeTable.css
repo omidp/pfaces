@@ -54,3 +54,8 @@ table.ptimetable tbody tr td{
 .holiday{
   color:#ED1212;
 }
+
+.currentDay{
+	font-weight: 700;
+	color:#4d4d4d;
+}

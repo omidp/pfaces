@@ -9,6 +9,8 @@ import java.util.UUID;
 public class DefaultCalendarModel implements CalendarModel
 {
 
+    private static final PersianCalendar pc = new PersianCalendar();
+    
     private List<CalendarEvent> events;
 
     public DefaultCalendarModel()
@@ -23,20 +25,8 @@ public class DefaultCalendarModel implements CalendarModel
 
     public boolean isHoliday(Date date)
     {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        cal.set(Calendar.HOUR, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        //
-        Calendar cal2 = Calendar.getInstance();
-        cal2.setTime(date);
-        cal2.set(Calendar.HOUR, 0);
-        cal2.set(Calendar.MINUTE, 0);
-        cal2.set(Calendar.SECOND, 0);
-        cal2.set(Calendar.MILLISECOND, 0);
-        return cal2.getTime().compareTo(cal.getTime()) == 0;
+        pc.setTime(date);       
+        return pc.get(PersianCalendar.DAY_OF_WEEK) == (PersianCalendar.FRIDAY-1);
     }
 
     public void addEvent(CalendarEvent ce)
