@@ -62,6 +62,7 @@ xmlns:pfaces="http://omidbiz.com/ui"
 
 ```
 <pfaces:datePicker value="#{vacationHome.instance.fromDate}" showTime="true"></pfaces:datePicker>
+<p:calendar  locale="fa" pattern="yyyy/MM/dd"></p:calendar>
 ```
 
 ###### timetable 
@@ -104,4 +105,4 @@ Project includes
 + jQuery 1.7
 + jQuery ui 1.8.16
 
-
+NOTE: you have to use [this primefaces patch](https://github.com/omidp/primefaces/tree/p6.1) if you are going to use datetime picker
