@@ -36,14 +36,20 @@ public class JalaliCalendarRenderer extends Renderer
     @Override
     public void encodeEnd(FacesContext context, UIComponent component) throws IOException
     {
-        this.encodeMarkup(context, (JalaliCalendar) component);
-        this.encodeScript(context, (JalaliCalendar) component);
+        if(component.isRendered())
+        {
+            this.encodeMarkup(context, (JalaliCalendar) component);
+            this.encodeScript(context, (JalaliCalendar) component);
+        }
     }
 
     private void encodeMarkup(FacesContext context, JalaliCalendar jalaliCalendar) throws IOException
     {
         ResponseWriter writer = context.getResponseWriter();
         String clientId = jalaliCalendar.getClientId(context);
+        String forceId = jalaliCalendar.getForceId();
+        if(forceId != null && forceId.trim().length() > 0)
+            clientId = forceId;
         writer.startElement("input", jalaliCalendar);
         writer.writeAttribute("type", "text", null);
         writer.writeAttribute("id", clientId, null);

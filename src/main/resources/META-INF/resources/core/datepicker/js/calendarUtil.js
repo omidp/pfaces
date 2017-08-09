@@ -1,12 +1,12 @@
-if (!window.Richfaces) {
-window.Richfaces = {};
+if (!window.pfaces) {
+window.pfaces = {};
 }
 
-if (!Richfaces.calendarControl) {
-	Richfaces.calendarControl = {};
+if (!pfaces.calendarControl) {
+	pfaces.calendarControl = {};
 }
 
-Richfaces.calendarControl.removeValue = function removeValue(obj){		
+pfaces.calendarControl.removeValue = function removeValue(obj){		
 	document.getElementById(obj).value = "";
 	
 }

@@ -22,7 +22,7 @@ public class JalaliCalendar extends UIInput
 
     protected enum PropertyKeys {
 
-        style, styleClass, disabled, onselect, showTime, value;
+        style, styleClass, disabled, onselect, showTime, value, forceId;
 
         String toString;
 
@@ -42,6 +42,17 @@ public class JalaliCalendar extends UIInput
 
     }
 
+    
+    public String getForceId()
+    {
+        return (String) getStateHelper().eval(PropertyKeys.forceId);
+    }
+    
+    public void setForceId(String forceId)
+    {
+        getStateHelper().put(PropertyKeys.forceId, forceId);
+    }
+    
     public boolean isDisabled()
     {
         return (Boolean) getStateHelper().eval(PropertyKeys.disabled, false);

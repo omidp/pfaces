@@ -12,6 +12,27 @@ git clone https://github.com/omidp/pfaces.git
 mvn clean install
 ```
 
+## Build for primefaces 6.x
+
+```
+mvn clean install -Pprimefaces
+```
+
+## Add Servlet resource
+
+* Add this in your web.xml
+
+```
+<servlet>
+		<servlet-name>pfaces-resource-serlvet</servlet-name>
+		<servlet-class>com.omidbiz.core.resources.ServletResource</servlet-class>		
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>pfaces-resource-serlvet</servlet-name>
+		<url-pattern>/pfaces/*</url-pattern>
+	</servlet-mapping>
+```
+
 ## Add dependency to your project
 
 ```
@@ -26,6 +47,13 @@ mvn clean install
 
 ```
 xmlns:pfaces="http://omidbiz.com/ui"
+```
+
+## How to use
+
+```
+<script type="text/javascript"	src="#{request.contextPath}/pfaces/pfaces.js" />
+<link type="text/css" rel="stylesheet" href="#{request.contextPath}/pfaces/pfaces.css" />
 ```
 
 ## Components
@@ -75,3 +103,5 @@ Project includes
 
 + jQuery 1.7
 + jQuery ui 1.8.16
+
+
