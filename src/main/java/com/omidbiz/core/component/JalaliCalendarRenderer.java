@@ -93,7 +93,7 @@ public class JalaliCalendarRenderer extends Renderer
         sb.append("jQuery(document).ready(function(){");
         sb.append(String.format("jQuery('#%s')", clientId.replace(":", "\\\\:")));
         if (component.isShowTime())
-            sb.append(".datetimepicker({controlType: 'select',oneLine: true, ");
+            sb.append(".datetimepicker({controlType: 'select', timeFormat: 'HH:mm',oneLine: true, ");
         else
             sb.append(".datepicker({ ");
         sb.append(" isRTL:true, dateFormat: 'yy/mm/dd', showButtonPanel: true, changeMonth: true, changeYear: true ");
