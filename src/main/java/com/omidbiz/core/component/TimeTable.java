@@ -6,8 +6,8 @@ import javax.faces.component.FacesComponent;
 import javax.faces.component.UIInput;
 
 @FacesComponent(value = TimeTable.COMPONENT_TYPE)
-@ResourceDependencies({ @ResourceDependency(library = "pfaces", name = "components.js"),
-        @ResourceDependency(library = "pfaces", name = "components.css") })
+@ResourceDependencies({ @ResourceDependency(library = "pfaces", name = "pfaces.js"),
+        @ResourceDependency(library = "pfaces", name = "pfaces.css") })
 public class TimeTable extends UIInput
 {
 

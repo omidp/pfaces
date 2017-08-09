@@ -6,8 +6,8 @@ import javax.faces.component.FacesComponent;
 import javax.faces.component.UIInput;
 
 @FacesComponent(value = JalaliCalendar.COMPONENT_TYPE)
-@ResourceDependencies({ @ResourceDependency(library = "pfaces", name = "components.js"),
-        @ResourceDependency(library = "pfaces", name = "components.css") })
+@ResourceDependencies({ @ResourceDependency(library = "pfaces", name = "pfaces.js"),
+        @ResourceDependency(library = "pfaces", name = "pfaces.css") })
 public class JalaliCalendar extends UIInput
 {
 
