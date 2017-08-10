@@ -9,13 +9,13 @@ git clone https://github.com/omidp/pfaces.git
 ## Build 
 
 ```
-mvn clean install
+mvn clean install -DskipTests=true -Pjsf
 ```
 
 ## Build for primefaces 6.x
 
 ```
-mvn clean install -Pprimefaces
+mvn clean install -DskipTests=true -Pprimefaces
 ```
 
 ## Add Servlet resource
@@ -51,7 +51,11 @@ xmlns:pfaces="http://omidbiz.com/ui"
 
 ## How to use
 
+* add this into html head tag
+
 ```
+<h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+<h:outputScript library="primefaces" name="jquery/jquery-plugins.js"	target="head" />
 <script type="text/javascript"	src="#{request.contextPath}/pfaces/pfaces.js" />
 <link type="text/css" rel="stylesheet" href="#{request.contextPath}/pfaces/pfaces.css" />
 ```
@@ -60,10 +64,18 @@ xmlns:pfaces="http://omidbiz.com/ui"
 
 ###### date picker
 
+
+
 ```
 <pfaces:datePicker value="#{vacationHome.instance.fromDate}" showTime="true"></pfaces:datePicker>
-<p:calendar  locale="fa" pattern="yyyy/MM/dd"></p:calendar>
 ```
+
+Or without datetimepicker
+
+```
+<p:calendar value="#{vacationHome.instance.fromDate}" locale="fa"></pfaces:datePicker>
+```
+
 
 ###### timetable 
 
@@ -73,6 +85,7 @@ xmlns:pfaces="http://omidbiz.com/ui"
 ```
 <pfaces:timeTable value="#{calendarEventHome.model}"></pfaces:timeTable>
 ```
+
 
 ```
 @Name("calendarEventHome")
@@ -105,4 +118,4 @@ Project includes
 + jQuery 1.7
 + jQuery ui 1.8.16
 
-NOTE: you have to use [this primefaces patch](https://github.com/omidp/primefaces/tree/p6.1) if you are going to use datetime picker
+NOTE: If you are going to use datetime picker, you need to use [this primefaces patch](https://github.com/omidp/primefaces/tree/p6.1) 
